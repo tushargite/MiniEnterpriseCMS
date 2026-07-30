@@ -1,71 +1,50 @@
-﻿@using Umbraco.Cms.Core.Models.Blocks
-@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
-
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BlockGridItem<ContentModels.Hero>>
-
+﻿@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem>
 @{
-    var hero = Model.Content;
+    var hero = (ContentModels.Hero)Model.Content;
     var settings = Model.Settings as ContentModels.HeroSettings;
 
-    var buttonLink = hero.ButtonLink?.FirstOrDefault();
+    // ButtonLink is a single Link (Multi URL Picker, max items = 1) — not a collection.
+    var buttonLink = hero.ButtonLink;
+
+    var sectionStyle = settings is null
+        ? string.Empty
+        : $"background-color:{settings.BackgroundColor};color:{settings.TextColor};padding-top:{settings.PaddingTop}px;padding-bottom:{settings.PaddingBottom}px;";
 }
-
-<section class="hero"
-         style="
-    background-color: @(settings?.BackgroundColor);
-    color: @(settings?.TextColor);
-    padding-top: @(settings?.PaddingTop ?? 0)px;
-    padding-bottom: @(settings?.PaddingBottom ?? 0)px;
-    ">
-
-    <div class="container">
-
-        <div class="hero-content">
-
-            @if (!string.IsNullOrWhiteSpace(hero.Heading))
-            {
-                <h1>@hero.Heading</h1>
-            }
-
+<section class="hero" style="@sectionStyle">
+    <div class="hero__container">
+        <div class="hero__content">
             @if (!string.IsNullOrWhiteSpace(hero.SubHeading))
             {
-                <h2>@hero.SubHeading</h2>
+                <span class="hero__subheading">@hero.SubHeading</span>
             }
-
+            @if (!string.IsNullOrWhiteSpace(hero.Heading))
+            {
+                <h1 class="hero__heading">@hero.Heading</h1>
+            }
             @if (!string.IsNullOrWhiteSpace(hero.Description))
             {
-                <p>@hero.Description</p>
+                <p class="hero__description">@hero.Description</p>
             }
-
-            @if (buttonLink != null && !string.IsNullOrWhiteSpace(hero.ButtonText))
+            @if (buttonLink is not null && !string.IsNullOrWhiteSpace(hero.ButtonText))
             {
-                <a href="@buttonLink.Url"
-                   target="@buttonLink.Target">
-                    @hero.ButtonText
+                <a class="hero__button"
+                   href="@buttonLink.Url"
+                   target="@(string.IsNullOrWhiteSpace(buttonLink.Target) ? "_self" : buttonLink.Target)">
+                    <span>@hero.ButtonText</span>
                 </a>
             }
-
         </div>
 
-        @if (hero.DesktopImage != null || hero.MobileImage != null)
+        @if (hero.DesktopImage is not null)
         {
-            <picture>
-
-                @if (hero.MobileImage != null)
+            <picture class="hero__media">
+                @if (hero.MobileImage is not null)
                 {
-                    <source media="(max-width: 767px)"
-                            srcset="@hero.MobileImage.Url()" />
+                    <source media="(max-width: 767px)" srcset="@hero.MobileImage.Url()" />
                 }
-
-                @if (hero.DesktopImage != null)
-                {
-                    <img src="@hero.DesktopImage.Url()"
-                         alt="@hero.Heading" />
-                }
-
+                <img class="hero__image" src="@hero.DesktopImage.Url()" alt="@hero.Heading" />
             </picture>
         }
-
     </div>
-
 </section>

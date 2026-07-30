@@ -1,0 +1,113 @@
+﻿/* ==========================================================================
+   Hero Block Grid component
+   Dynamic values (background/text color, top/bottom padding) are set
+   per-instance via inline style from Hero Settings (see hero.cshtml).
+   This file owns layout, typography, and responsive behavior only.
+   ========================================================================== */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-inline: 24px;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    flex-wrap: wrap;
+}
+
+.hero__content {
+    flex: 1 1 420px;
+    min-width: 280px;
+}
+
+.hero__subheading {
+    display: inline-block;
+    margin: 0 0 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.75;
+}
+
+.hero__heading {
+    margin: 0 0 16px;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.hero__description {
+    margin: 0 0 28px;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 46ch;
+    opacity: 0.85;
+}
+
+.hero__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 999px;
+    background: currentColor;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    isolation: isolate;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+    .hero__button span {
+        color: Canvas; /* inverted against currentColor background */
+    }
+
+    .hero__button::after {
+        content: "\2192";
+        color: Canvas;
+        transition: transform 0.15s ease;
+    }
+
+    .hero__button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+        .hero__button:hover::after {
+            transform: translateX(4px);
+        }
+
+.hero__media {
+    flex: 1 1 420px;
+    min-width: 280px;
+    display: block;
+    line-height: 0;
+}
+
+.hero__image {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.25);
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+}
+
+@media (max-width: 767px) {
+    .hero__container {
+        flex-direction: column;
+        text-align: center;
+        gap: 32px;
+    }
+
+    .hero__description {
+        margin-inline: auto;
+    }
+}

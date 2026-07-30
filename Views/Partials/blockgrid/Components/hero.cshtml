@@ -1,0 +1,71 @@
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
+
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BlockGridItem<ContentModels.Hero>>
+
+@{
+    var hero = Model.Content;
+    var settings = Model.Settings as ContentModels.HeroSettings;
+
+    var buttonLink = hero.ButtonLink?.FirstOrDefault();
+}
+
+<section class="hero"
+         style="
+    background-color: @(settings?.BackgroundColor);
+    color: @(settings?.TextColor);
+    padding-top: @(settings?.PaddingTop ?? 0)px;
+    padding-bottom: @(settings?.PaddingBottom ?? 0)px;
+    ">
+
+    <div class="container">
+
+        <div class="hero-content">
+
+            @if (!string.IsNullOrWhiteSpace(hero.Heading))
+            {
+                <h1>@hero.Heading</h1>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(hero.SubHeading))
+            {
+                <h2>@hero.SubHeading</h2>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(hero.Description))
+            {
+                <p>@hero.Description</p>
+            }
+
+            @if (buttonLink != null && !string.IsNullOrWhiteSpace(hero.ButtonText))
+            {
+                <a href="@buttonLink.Url"
+                   target="@buttonLink.Target">
+                    @hero.ButtonText
+                </a>
+            }
+
+        </div>
+
+        @if (hero.DesktopImage != null || hero.MobileImage != null)
+        {
+            <picture>
+
+                @if (hero.MobileImage != null)
+                {
+                    <source media="(max-width: 767px)"
+                            srcset="@hero.MobileImage.Url()" />
+                }
+
+                @if (hero.DesktopImage != null)
+                {
+                    <img src="@hero.DesktopImage.Url()"
+                         alt="@hero.Heading" />
+                }
+
+            </picture>
+        }
+
+    </div>
+
+</section>
